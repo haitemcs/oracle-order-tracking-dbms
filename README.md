@@ -1,62 +1,68 @@
 # Oracle Order Tracking DBMS
 
-A relational database project built with Oracle Database Free and SQL, focused on designing and querying data for an order-tracking workflow.
+A hands-on relational database project for an order-tracking workflow, built with Oracle Database Free and SQL. The project is being developed to practice relational modeling, SQL querying, database constraints, and local database administration.
 
-## Overview
+## Project Goals
 
-This project is intended to demonstrate practical SQL and relational database skills:
-- Relational data modeling for an order-tracking domain
-- Writing and executing SQL queries
-- Organizing database scripts
-- Running Oracle Database locally with Docker
-- Using Oracle SQL Developer for Visual Studio Code
+- Model an order-tracking domain using relational tables and relationships.
+- Write readable SQL queries for retrieving and summarizing data.
+- Practice primary keys, foreign keys, constraints, and indexes.
+- Run Oracle Database locally with Docker.
+- Develop and execute SQL using Visual Studio Code and the Oracle SQL Developer extension.
 
-**Status:** In progress. Update this README as the schema, constraints, sample data, and query collection evolve.
+> **Project status:** In progress. This README describes the project goals and local development setup; update the implementation checklist as database scripts and features are added.
 
-## Technology Stack
+## Tech Stack
 
-- Oracle Database Free
-- SQL
-- Docker
-- Visual Studio Code with the Oracle SQL Developer extension
+- **Database:** Oracle Database Free
+- **Query language:** SQL
+- **Local environment:** Docker
+- **SQL editor:** Visual Studio Code + Oracle SQL Developer extension
 
-## Connect to the Local Database
+## Local Database Connection
 
-The local development setup uses port 1521.
+The current local setup is configured to use the following connection details:
 
 | Setting | Value |
 | --- | --- |
-| Host | localhost |
-| Port | 1521 |
-| Service name | FREEPDB1 |
+| Host | `localhost` |
+| Port | `1521` |
+| Service name | `FREEPDB1` |
 | Username | Your configured Oracle username |
 | Password | Your configured Oracle password |
 
-Use the credentials configured for your database. Never commit passwords, connection exports containing secrets, or .env files.
+Use your own saved credentials. **Never commit database passwords, secret connection exports, or files containing credentials.**
 
-If the existing container has already been created, start it with ```bash
+### Start the existing container
+
+If the `oracle-db` container has already been created:
+
+```bash
 docker start oracle-db
 ```
 
-Check its status with ```bash
+Check whether it is running:
+
+```bash
 docker ps
 ```
 
-If startup fails because port 1521 is occupied, identify the process or container using that port before changing or removing anything.
+If startup fails because port `1521` is already in use, inspect the process or container holding that port before stopping or removing anything. Do not delete the database container or its volume as a first troubleshooting step.
 
 ## Run SQL in VS Code
 
-1. Start the local Oracle container.
-2. Open the repository in VS Code.
-3. Open a SQL script.
-4. Connect to your saved Oracle connection and attach it to the active worksheet.
-5. Execute the current statement or selected SQL.
+1. Start the Oracle container.
+2. Open this repository in VS Code.
+3. Open the SQL script you want to run.
+4. Connect using your saved Oracle connection.
+5. Attach that connection to the active SQL worksheet.
+6. Run the current statement or selected SQL.
 
-If VS Code reports that the worksheet has no active connection, confirm that the connection is connected and attached to the active worksheet.
+If VS Code reports that there is no active session, verify that the connection is connected and attached to the worksheet currently open.
 
 ## Example Query
 
-This query lists countries alphabetically, provided the COUNTRIES table and its columns exist in your database:
+The following example lists countries alphabetically, assuming a `COUNTRIES` table with `COUNTRY_ID` and `COUNTRY_NAME` columns exists in your database:
 
 ```sql
 SELECT country_id, country_name
@@ -64,9 +70,9 @@ FROM countries
 ORDER BY country_name;
 ```
 
-## Suggested Repository Structure
+## Suggested SQL Organization
 
-As the project grows, organize SQL scripts by purpose. For example:
+As the project expands, SQL scripts can be organized by responsibility. For example:
 
 ```text
 oracle-order-tracking-dbms/
@@ -80,21 +86,24 @@ oracle-order-tracking-dbms/
     └── er-diagram.png
 ```
 
-This is a suggested structure; keep names aligned with the files actually present in the repository.
+This is a suggested structure, not a guarantee of the repository's current files. Keep the structure in sync with what is actually committed.
 
-## Next Steps
+## Development Checklist
 
-- Document the entity-relationship model.
-- Add schema creation scripts and clearly named constraints.
-- Include representative sample data.
-- Add joins, aggregations, subqueries, and reporting queries.
-- Document how to initialize a fresh local database.
-- Add an ER diagram or screenshots when available.
+- [ ] Document the order-tracking requirements and entities.
+- [ ] Create the relational schema and relationships.
+- [ ] Add named primary-key, foreign-key, and validation constraints.
+- [ ] Add representative sample data.
+- [ ] Write example queries using joins, filtering, aggregation, and subqueries.
+- [ ] Document how to initialize the database from a clean environment.
+- [ ] Add an ER diagram and example query results.
 
 ## Security
 
-Never commit real database passwords, private connection files, or other credentials. Keep secrets out of version control.
+- Do not commit passwords, tokens, or private connection configuration.
+- Use local environment configuration for secrets and keep it out of version control.
+- Avoid including real customer or personal data in sample records.
 
 ## License
 
-No license has been specified yet. Add a LICENSE file if you want to define how others may use, modify, and distribute this project.
+No license has been specified. Until a license is added, others should not assume they have permission to redistribute or reuse this project.
