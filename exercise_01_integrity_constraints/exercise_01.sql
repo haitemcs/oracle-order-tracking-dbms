@@ -1,6 +1,5 @@
 -- ============================================================
 -- EXERCISE 01: INTEGRITY CONSTRAINTS
--- Difficulty: EASY
 -- Topics: PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK, NOT NULL
 -- ============================================================
 
@@ -37,9 +36,9 @@ create table student (
 create table exam_result (
    result_id  number primary key,
    student_id number
-      references to ( student ),
+      references student( student_id ),
    grade      number check ( grade between 0 and 20 ),
-   exam_date  timestamp not null
+   exam_date  date not null
 )
 
 -- TODO: CREATE TABLE EXAM_RESULT
@@ -62,24 +61,29 @@ insert into student values
 
 -- TASK 4:
 -- Insert two exam results for existing students.
+insert into EXAM_RESULT values (
+    1,
+    1,
+    20,
+    2026-02-01
+);
+
+insert into EXAM_RESULT values (
+    2,
+    2,
+    10,
+    2026-10-2
+);
 
 -- TODO: INSERT EXAM RESULTS
 
+insert into student values
+   ( 1,
+     haitem,
+     14,
+     yow@gmail.com );
 
--- TASK 5:
--- Test the age constraint.
--- What happens when you try inserting a student aged 14?
-
--- TODO: TEST INVALID AGE
-
-
--- TASK 6:
--- Test the grade constraint.
--- What happens when you insert a grade of 22?
-
--- TODO: TEST INVALID GRADE
-
-
+-
 -- TASK 7:
 -- Test referential integrity.
 -- Try inserting a result for a nonexistent student.
@@ -87,15 +91,23 @@ insert into student values
 -- TODO: TEST INVALID FOREIGN KEY
 
 
+
 -- TASK 8:
 -- Display the students and their exam results.
 
 -- TODO: WRITE A SELECT QUERY
 
+SELECT
+    s.student_id,
+    s.student_name,
+    s.age,
+    s.email,
+    er.result_id,
+    er.grade,
+    er.exam_date
+ FROM student s
+ JOIN exam_result er
+    ON s.student_id = er.student_id
+ ORDER BY s.student_id;
 
--- THEORY QUESTIONS:
--- 1. What is an integrity constraint?
--- 2. What is the difference between PRIMARY KEY and UNIQUE?
--- 3. Why is the age constraint a static constraint?
--- 4. What is referential integrity?
--- 5. Identify the primary key and foreign key in EXAM_RESULT.
+
