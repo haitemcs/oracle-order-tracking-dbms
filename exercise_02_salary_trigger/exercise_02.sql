@@ -1,9 +1,40 @@
+
+
+--trigger is a special type of stored procedure that automatically executes (or fires) in response to a specific database event. 
+--Unlike regular stored procedures, you do not call a trigger manually; the database engine runs it whenever the associated event occurs.
+
+-- there is two type of trigger the first one is DML OR DDL 
+--DML:(insert or update or delete)
+--DDL:(create or alter or drop)
+
+
+--steps :
+--Someone updates a product
+          |
+          v
+--Oracle detects the UPDATE
+          |
+          v
+--The trigger executes
+          |
+          v
+--The trigger performs its instructions
+
+-- the general structure of trigger : 
+create or repalce trigger product_audit_trigger
+after update on products
+for each row 
+begin
+ DBMS_OUTPUT.PUT_LINE("A PRODUCT WAS UPDATED ");
+ END
+
+ -- there is before and after 
+ 
+
+
 -- ============================================================
 -- EXERCISE 02: SALARY PROTECTION TRIGGER
--- Difficulty: INTERMEDIATE
 -- Topics: PL/SQL, BEFORE UPDATE, :OLD, :NEW, exceptions
--- ============================================================
-
 -- STEP 1: CREATE THE TABLE
 
 CREATE TABLE employees (
@@ -22,7 +53,7 @@ COMMIT;
 -- STEP 3: YOUR TASK
 --
 -- Create a trigger named CHECK_SALARY_TRG.
---
+-- 
 -- Requirements:
 --   1. Execute BEFORE UPDATE OF salary.
 --   2. Execute FOR EACH ROW.
@@ -71,7 +102,7 @@ FROM user_triggers
 WHERE trigger_name = 'CHECK_SALARY_TRG';
 
 -- THEORY QUESTIONS:
--- 1. What does :OLD.salary represent?
+-- 1. What does :OLD.salary represent? 
 -- 2. What does :NEW.salary represent?
 -- 3. Why is this a dynamic integrity constraint?
 -- 4. What does BEFORE UPDATE OF salary mean?
