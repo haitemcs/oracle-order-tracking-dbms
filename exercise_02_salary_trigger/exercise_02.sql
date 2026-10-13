@@ -153,7 +153,9 @@ COMMIT;
 -- STEP 3: YOUR TASK
 --
 -- Create a trigger named CHECK_SALARY_TRG.
--- 
+
+
+
 -- Requirements:
 --   1. Execute BEFORE UPDATE OF salary.
 --   2. Execute FOR EACH ROW.
@@ -161,8 +163,17 @@ COMMIT;
 --   4. Reject a salary decrease.
 --   5. Use RAISE_APPLICATION_ERROR.
 --   6. Use error number -20001.
---
--- TODO: WRITE YOUR TRIGGER HERE
+
+create or replace trigger check_salary_trg
+before update of salary on employees
+for each row 
+begin
+if :new.salary < :old.salary then
+ RAISE_APPLICATION_ERROR ("ERROR : " , -20001 , " salary decrease")
+end if ;
+end;
+/
+
 
 
 -- STEP 4: TEST A — SALARY INCREASE
@@ -201,7 +212,29 @@ SELECT trigger_name, table_name, status
 FROM user_triggers
 WHERE trigger_name = 'CHECK_SALARY_TRG';
 
--- THEORY QUESTIONS:
+-- THEORY QUESTIONS AND ANSWERS:
+
+-- 1. What does :OLD.salary represent?
+-- Answer: It represents the employee's salary before the update.
+
+-- 2. What does :NEW.salary represent?
+-- Answer: It represents the employee's salary after the update.
+
+-- 3. Why is this a dynamic integrity constraint?
+-- Answer: Because it checks a condition when data is modified.
+--         It compares the old and new salaries to prevent a salary decrease.
+
+-- 4. What does BEFORE UPDATE OF salary mean?
+-- Answer: It means the trigger executes before an UPDATE statement
+--         changes the salary column.
+
+-- 5. What does FOR EACH ROW mean?
+-- Answer: It means the trigger executes once for each row affected
+--         by the UPDATE statement.
+
+-- 6. What happens when RAISE_APPLICATION_ERROR executes?
+-- Answer: It raises a custom error and stops the current operation.
+--         The salary update is rejected if the trigger raises the error.-- THEORY QUESTIONS:
 -- 1. What does :OLD.salary represent? 
 -- 2. What does :NEW.salary represent?
 -- 3. Why is this a dynamic integrity constraint?
