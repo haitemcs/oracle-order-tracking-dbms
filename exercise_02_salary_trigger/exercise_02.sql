@@ -1,5 +1,5 @@
 
-
+--LESSON 02: TRIGGERS
 --trigger is a special type of stored procedure that automatically executes (or fires) in response to a specific database event. 
 --Unlike regular stored procedures, you do not call a trigger manually; the database engine runs it whenever the associated event occurs.
 
@@ -20,16 +20,45 @@
           v
 --The trigger performs its instructions
 
+
+
 -- the general structure of trigger : 
-create or repalce trigger product_audit_trigger
+create or replace trigger product_audit_trigger --create a trigger named product_audit_trigger if the name already exist it will replace it
 after update on products
 for each row 
 begin
  DBMS_OUTPUT.PUT_LINE("A PRODUCT WAS UPDATED ");
- END
+END
 
  -- there is before and after 
- 
+ -- AFTER UPDATE ON products
+ --BEFORE UPDATE ON products
+ -- BEFORE Executes before the row operation is completed. AFTER Executes after the row operation has been performed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 -- ============================================================
