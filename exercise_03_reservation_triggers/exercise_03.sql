@@ -1,8 +1,6 @@
 -- ============================================================
 -- EXERCISE 03: RESERVATION CAPACITY AND AUDIT
--- Difficulty: ADVANCED
 -- Topics: Aggregation, triggers, auditing, exceptions
--- ============================================================
 
 -- STEP 1: CREATE THE TABLES
 
@@ -65,6 +63,16 @@ COMMIT;
 --
 -- TODO: IMPLEMENT CAPACITY VALIDATION
 
+select nvl(count(reservation_id),0) as total_reservation , max_place 
+from reservation join trip
+ if total_reservation > max_places then 
+  raise_application_error (-20001,"no enough place ")
+else insert into reservation values (reservation_id,trip_id,nb_persons);
+COMMIT;
+DBMS_OUTPUT.PUT_LINE('Reservation added successfully.');
+END IF;
+END;
+/   
 
 -- TASK 2: TEST CAPACITY
 --
@@ -102,12 +110,23 @@ COMMIT;
 --   4. Store the operation type: UPDATE or DELETE.
 --   5. Store USER as the database username.
 --   6. Store SYSDATE as the operation date.
---
--- Hint:
---   Use the UPDATING and DELETING predicates.
---   Use :OLD.reservation_id for the affected row.
---
+
 -- TODO: CREATE THE AUDIT TRIGGER
+
+CREATE OR REPLACE TRIGGER reservation_audit_trg
+AFTER UPDATE OR DELETE ON reservation
+FOR EACH ROW
+BEGIN
+    IF UPDATING THEN
+        INSERT INTO reservation_audit (reservation_id, operation_type, performed_by, operation_date)
+        VALUES (:OLD.reservation_id, 'UPDATE', USER, SYSDATE);
+        
+    ELSIF DELETING THEN
+        INSERT INTO reservation_audit (reservation_id, operation_type, performed_by, operation_date)
+        VALUES (:OLD.reservation_id, 'DELETE', USER, SYSDATE);
+    END IF;
+END;
+/
 
 
 -- TASK 4: TEST THE AUDIT TRIGGER
@@ -158,14 +177,37 @@ SELECT trigger_name, table_name, status
 FROM user_triggers
 WHERE table_name IN ('RESERVATION', 'TRIP');
 
--- ============================================================
--- THEORY QUESTIONS
--- ============================================================
+
+
+
+-- THEORY QUESTIONS AND ANSWERS
+
 -- 1. Why can ORA-04091 occur in a row-level trigger?
+-- Answer: ORA-04091 occurs when a row-level trigger tries to read
+--         or modify the same table that is currently being changed
+--         by the triggering statement. Oracle calls this a mutating
+--         table error.
+
 -- 2. Why can simultaneous reservations cause a race condition?
+-- Answer: Because two transactions may check the available capacity
+--         at the same time and both see enough space. They may then
+--         both create reservations, causing the total capacity
+--         to be exceeded.
+
 -- 3. Why should ordinary triggers not issue COMMIT or ROLLBACK?
+-- Answer: Because triggers normally execute as part of the
+--         transaction that fired them. COMMIT or ROLLBACK inside
+--         an ordinary trigger is not allowed and can raise an error.
+--         The calling transaction should control its own changes.
+
 -- 4. What happens to the audit record if the triggering
 --    statement fails and its error propagates?
+-- Answer: The audit record created by the trigger is normally
+--         rolled back along with the failed statement because both
+--         changes belong to the same transaction.
+
 -- 5. Why should a capacity check reject only totals greater
 --    than the maximum, rather than totals equal to it?
-
+-- Answer: Because a total equal to the maximum means the capacity
+--         is exactly full, which is valid. Only a total greater
+--         than the maximum exceeds the allowed capacity.
