@@ -59,7 +59,7 @@ The topic folders are a learning roadmap. Some scripts are intentionally placeho
 - Conditional aggregation and date formatting in reports
 - Multi-table join practice (initial work)
 - Integrity-constraint exercises
-- Row-level trigger exercises, including salary rules and reservation-related validation/auditing concepts
+- Trigger exercises for salary rules, customer auditing, and reservation capacity validation
 
 ### Planned or in progress
 
@@ -67,7 +67,7 @@ The topic folders are a learning roadmap. Some scripts are intentionally placeho
 - Scalar and correlated subqueries
 - `CASE` expressions, analytic functions, and common table expressions (CTEs)
 - Data dictionary and metadata queries
-- Views and object privileges
+- Views (employee service years, customer sales, and read-only customer credits)\n- Customer UPDATE/DELETE auditing with triggers\n- Object privileges
 - Transactions, savepoints, and recovery concepts
 - Multi-session concurrency, locking, and isolation behavior
 - Indexes and execution-plan-based optimization
